@@ -16,39 +16,30 @@
             font-size: 2em;
             margin-bottom: 20px;
         }
-        input, button {
+        input {
             padding: 15px;
             margin: 10px;
             font-size: 1.1em;
             width: 100%;
             max-width: 300px;
-        }
-        input {
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
         }
         h2 {
             margin-top: 30px;
             font-size: 1.5em;
             word-wrap: break-word;
         }
+        .highlight {
+            color: red;
+        }
         /* Media Query for Mobile Screens */
         @media (max-width: 600px) {
             h1 {
                 font-size: 1.5em;
             }
-            input, button {
+            input {
                 font-size: 1em;
                 padding: 12px;
             }
@@ -62,8 +53,7 @@
 
     <h1>Number to Word Converter (Rupees & Cents)</h1>
 
-    <input type="text" id="numberInput" placeholder="Enter amount (e.g., 1234.56)" />
-    <button onclick="convertToWords()">Convert</button>
+    <input type="text" id="numberInput" placeholder="Enter amount (e.g., 1234.56)" oninput="convertToWords()" />
 
     <h2 id="result"></h2>
 
@@ -86,8 +76,8 @@
             let rupeesPart = parseInt(rupees);
             let centsPart = cents ? parseInt(cents.substring(0, 2)) : 0;
 
-            let rupeesInWords = numberToWords(rupeesPart) + " Rupees";
-            let centsInWords = centsPart > 0 ? " and " + numberToWords(centsPart) + " Cents" : "";
+            let rupeesInWords = numberToWords(rupeesPart) + ' <span class="highlight">Rupees</span>';
+            let centsInWords = centsPart > 0 ? ' and ' + numberToWords(centsPart) + ' <span class="highlight">Cents</span>' : "";
 
             result.innerHTML = rupeesInWords + centsInWords;
         }
