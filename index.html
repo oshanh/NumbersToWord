@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number to Word Converter (Rupees & Cents)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            padding: 0 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 15px;
+            margin: 10px;
+            font-size: 1.1em;
+            width: 100%;
+            max-width: 300px;
+        }
+        input {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        h2 {
+            margin-top: 30px;
+            font-size: 1.5em;
+            word-wrap: break-word;
+        }
+        /* Media Query for Mobile Screens */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            input, button {
+                font-size: 1em;
+                padding: 12px;
+            }
+            h2 {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Number to Word Converter (Rupees & Cents)</h1>
+
+    <input type="text" id="numberInput" placeholder="Enter amount (e.g., 1234.56)" />
+    <button onclick="convertToWords()">Convert</button>
+
+    <h2 id="result"></h2>
+
+    <script>
+        const units = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
+        const teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+        const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+        const thousands = ["", "Thousand", "Million", "Billion", "Trillion", "Quadrillion", "Quintillion"];
+
+        function convertToWords() {
+            let num = document.getElementById("numberInput").value;
+            let result = document.getElementById("result");
+
+            if (num === "") {
+                result.innerHTML = "Please enter an amount.";
+                return;
+            }
+
+            let [rupees, cents] = num.split(".");
+            let rupeesPart = parseInt(rupees);
+            let centsPart = cents ? parseInt(cents.substring(0, 2)) : 0;
+
+            let rupeesInWords = numberToWords(rupeesPart) + " Rupees";
+            let centsInWords = centsPart > 0 ? " and " + numberToWords(centsPart) + " Cents" : "";
+
+            result.innerHTML = rupeesInWords + centsInWords;
+        }
+
+        function numberToWords(num) {
+            if (num === 0) return "Zero";
+
+            let word = "";
+            let thousandCounter = 0;
+
+            while (num > 0) {
+                let chunk = num % 1000; // Process the last 3 digits
+                if (chunk > 0) {
+                    word = chunkToWords(chunk) + " " + thousands[thousandCounter] + " " + word;
+                }
+                num = Math.floor(num / 1000);
+                thousandCounter++;
+            }
+
+            return word.trim();
+        }
+
+        function chunkToWords(num) {
+            let word = "";
+
+            if (num > 99) {
+                word += units[Math.floor(num / 100)] + " Hundred ";
+                num %= 100;
+            }
+
+            if (num > 19) {
+                word += tens[Math.floor(num / 10)] + " ";
+                num %= 10;
+            } else if (num >= 10) {
+                word += teens[num - 10] + " ";
+                num = 0;
+            }
+
+            word += units[num];
+            return word.trim();
+        }
+    </script>
+
+</body>
+</html>
